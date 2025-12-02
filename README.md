@@ -1,1 +1,1 @@
-# SGARNet-codes
+# SGARNet
