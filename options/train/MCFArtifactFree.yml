@@ -1,0 +1,122 @@
+# general settings
+name: SGARNet_train
+model_type: ImageRestorationModel
+scale: 1
+num_gpu: 1  # adjust according your numbers of GPU
+manual_seed: 10
+
+datasets:
+  train:
+    name: MCFsDatasetTrain
+    type: PairedImageDataset
+    dataroot_gt: ./datasets/MCFsDataset/train/target_all.lmdb
+    dataroot_lq: ./datasets/MCFsDataset/train/input_all.lmdb
+    meta_info_file: null
+    filename_tmpl: '{}'
+    io_backend:
+      type: lmdb
+    gt_size: 368
+    use_flip: true
+    use_rot: true
+
+    # dataloader
+    use_shuffle: true
+    num_worker_per_gpu: 4
+    batch_size_per_gpu: 8
+    dataset_enlarge_ratio: 1
+    prefetch_mode: null
+    phase: train
+    scale: 1
+
+  val:
+    name: MCFsDatasetVal
+    type: PairedImageDataset
+    dataroot_gt: ./datasets/MCFsDataset/val/target.lmdb
+    dataroot_lq: ./datasets/MCFsDataset/val/input.lmdb
+    meta_info_file: null
+    filename_tmpl: '{}'
+    io_backend:
+      type: lmdb
+    phase: val
+    scale: 1
+
+network_g:
+  type: SGARNet
+  width: 32
+  enc_blk_nums: [1, 1, 1, 14]
+  middle_blk_num: 1
+  dec_blk_nums: [1, 1, 1, 1]
+
+  # model-specific gate settings
+  gate_a_px_input: 4.8
+  gate_bandwidth: 0.06
+  gate_harmonics: [1, 2]
+  gate_alpha_max: 0.7
+  gate_init_alpha: 0.0
+  gate_per_channel: true
+
+path:
+  pretrain_network_g: null
+  strict_load_g: true
+  resume_state: null
+
+train:
+  optim_g:
+    type: AdamW
+    lr: !!float 1e-3
+    weight_decay: !!float 1e-3
+    betas: [0.9, 0.9]
+
+  scheduler:
+    type: TrueCosineAnnealingLR
+    T_max: 100000
+    eta_min: !!float 1e-7
+
+  total_iter: 100000
+  warmup_iter: -1
+
+  pixel_opt:
+    type: PSNRLoss
+    loss_weight: 1
+    reduction: mean
+
+  perceptual_opt:
+    type: PerceptualLoss
+    loss_weight: 0.01
+    pretrained: true
+    layer_weights:
+      relu1_1: 0.1
+      relu2_1: 0.1
+      relu3_1: 0.1
+      relu4_1: 0.1
+      relu5_1: 0.1
+    criterion: 'mse'
+    norm_img: true
+
+val:
+  val_freq: 20000
+  save_img: false
+  rgb2bgr: true
+  use_image: true
+
+  metrics:
+    psnr:
+      type: calculate_psnr
+      crop_border: 0
+      test_y_channel: false
+    ssim:
+      type: calculate_ssim
+      crop_border: 0
+      test_y_channel: false
+
+logger:
+  print_freq: 200
+  save_checkpoint_freq: 5000
+  use_tb_logger: true
+  wandb:
+    project: null
+    resume_id: null
+
+dist_params:
+  backend: nccl
+  port: 29500
