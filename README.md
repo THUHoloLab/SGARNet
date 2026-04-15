@@ -33,11 +33,11 @@ SGARNet algorithms are implemented  based on [NAFNet](https://github.com/megvii-
 
 ##### 2. Download the dataset
 
-- The full dataset will be made publicly available in a future update.
+- Click [**here**](https://drive.google.com/drive/folders/1rYAxdxvWxyM32WrRLjPwxSmKdLZG-FZI?usp=drive_link) to download the full datasets.
 
 ##### 3. Run code
  
--  The code will be updated and released in a future version.
+-  Run python -m basicsr.train -opt options/train/XXX.yml.
 
 
 
