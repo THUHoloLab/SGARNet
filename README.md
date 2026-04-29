@@ -1,7 +1,6 @@
-<h1> SGARNet: A Deep Artifact Removal Approach for Lensless Multi-Core Fiber Imaging </h1>
+<h1> SGARNet: a deep artifact removal approach for lensless multi-core fiber imaging </h1>
 
- **（Unpublished work）**
-authors: Zewen Ma (mzw25@mails.tsinghua.edu.cn), Jinwen Wei (weijw24@mails.tsinghua.edu.cn), Juergen Czarke (juergen.czarske@tu-dresden.de), Jiachen Wu(wjc2022@tsinghua.edu.cn) and Liangcai Cao(clc@tsinghua.edu.cn)
+authors: Zewen Ma (mzw25@mails.tsinghua.edu.cn), Jinwen Wei, Juergen Czarke, Jiachen Wu(wjc2022@tsinghua.edu.cn) and Liangcai Cao(clc@tsinghua.edu.cn)
 
 
 Multi-core fiber (MCF) imaging is essential for minimally invasive endoscopy in medicine and industrial inspection. We present a lensless MCF imaging approach based on SGARNet (Spectral-Guided Artifact Removal Network). In this framework, a physics-informed prior is embedded through a lightweight SpectralGate module to suppress lattice-frequency artifacts in the feature domain.
